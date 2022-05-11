@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -40,7 +39,7 @@ public class UserController {
                             user.getEmail() + " уже зарегистрирован.");
                 }
             }*/
-        if (user.getLogin().isBlank() || user.getLogin() == null||user.getLogin().contains(" ")) {
+        if (user.getLogin().isBlank() || user.getLogin() == null || user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы");
         }
 
@@ -70,11 +69,11 @@ public class UserController {
             throw new ValidationException("Некорректный Email");
         }
 
-        if (user.getLogin().isBlank() || user.getLogin() == null||user.getLogin().contains(" ")) {
+        if (user.getLogin().isBlank() || user.getLogin() == null || user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы");
         }
         if (user.getName().isBlank() || user.getName() == null) {
-             user.setName(user.getLogin());
+            user.setName(user.getLogin());
         }
         if (user.getBirthday().isAfter(LocalDate.now()) || user.getBirthday().equals(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть сегодняшней или будущей");

@@ -36,7 +36,7 @@ public class FilmController {
                             film.getName() + " уже есть в коллекции.");
                 }
             }*/
-        if (film.getDescription().isBlank()||film.getDescription()== null||film.getDescription().length() > 200) {
+        if (film.getDescription().isBlank() || film.getDescription() == null || film.getDescription().length() > 200) {
             throw new ValidationException("Описание слишком длинное, макс. длина 200 символов");
         }
 
@@ -56,13 +56,13 @@ public class FilmController {
 
     @PutMapping(value = "/films")
     public Film updateFilm(@RequestBody Film film) {
-       // boolean exception = true;
+        // boolean exception = true;
 
         if (film.getName().isBlank() || film.getName() == null) {
             throw new ValidationException("Название не может быть пустым");
         }
 
-        if (film.getDescription().isBlank()||film.getDescription()== null||film.getDescription().length() > 200) {
+        if (film.getDescription().isBlank() || film.getDescription() == null || film.getDescription().length() > 200) {
             throw new ValidationException("Описание слишком длинное, макс. длина 200 символов");
         }
 
