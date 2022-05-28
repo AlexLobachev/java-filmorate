@@ -1,44 +1,79 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.OperationsFilmService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
+import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@Slf4j
+@Valid
 public class FilmController {
-    private final Map<Integer, Film> films = new HashMap<>();
-    private int id = 0;
-    private final ControllersValidator controllersValidator = new ControllersValidator();
+    @Autowired
+    private final InMemoryFilmStorage inMemoryFilmStorage;
+    @Autowired
+    private final OperationsFilmService operationsFilmService;
+
+    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, OperationsFilmService operationsFilmService) {
+        this.inMemoryFilmStorage = inMemoryFilmStorage;
+        this.operationsFilmService = operationsFilmService;
+    }
 
     @GetMapping("/films")
     public Collection<Film> getAllFilms() {
-        log.debug("Всего фильмов = {}", films.size());
-        return films.values();
+        return inMemoryFilmStorage.getAllFilms();
+    }
+
+    @GetMapping(value = "/films/{id}")
+    public Film getFilm(@PathVariable int id) {
+        return operationsFilmService.getFilm(id);
     }
 
     @PostMapping(value = "/films")
-    public Film addFilm(@RequestBody Film film) {
-        controllersValidator.filmValidator(film);
-        film.setId(++id);
-        films.put(id, film);
-        log.debug("Фильм добавлен, всего фильмов = {}", films.size());
-
-        return film;
+    public Film addFilm(@Valid @RequestBody Film film) {
+        return inMemoryFilmStorage.addFilm(film);
     }
 
     @PutMapping(value = "/films")
-    public Film updateFilm(@RequestBody Film film) {
-        controllersValidator.filmValidator(film);
-        films.put(film.getId(), film);
-        log.debug("Фильм успешно изменен, всего фильмов = {}", films.size());
-
-        return film;
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        return inMemoryFilmStorage.updateFilm(film);
     }
 
+    @PutMapping(value = "/films/{id}/like/{userId}")
+    public Film addLike(@PathVariable int id, @PathVariable int userId) {
+        return operationsFilmService.addLike(id, userId);
+    }
+
+    @DeleteMapping(value = "/films/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable int id, @PathVariable int userId) {
+        return operationsFilmService.deleteLike(id, userId);
+    }
+
+    @GetMapping(value = "/films/popular")
+    public List<Film> getTenPopularMovies(@RequestParam(defaultValue = "10") int count) {
+        return operationsFilmService.getTenPopularMovies(count);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> errorException(final ValidationException e) {
+        return Map.of("ERROR", "ОШИБКА ВВОДА",
+                "errorMessage", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> errorException(final IllegalArgumentException e) {
+        return Map.of("ERROR", "ОШИБКА ВВОДА",
+                "errorMessage", e.getMessage());
+
+    }
 
 }
