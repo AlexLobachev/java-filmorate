@@ -16,11 +16,11 @@ import java.util.Map;
 @RestController
 @Valid
 public class FilmController {
-    @Autowired
-    private final InMemoryFilmStorage inMemoryFilmStorage;
-    @Autowired
-    private final OperationsFilmService operationsFilmService;
 
+    private final InMemoryFilmStorage inMemoryFilmStorage;
+
+    private final OperationsFilmService operationsFilmService;
+    @Autowired
     public FilmController(InMemoryFilmStorage inMemoryFilmStorage, OperationsFilmService operationsFilmService) {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
         this.operationsFilmService = operationsFilmService;

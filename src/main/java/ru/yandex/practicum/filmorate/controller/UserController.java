@@ -26,6 +26,9 @@ public class UserController {
         this.operationsUserService = operationsUserService;
     }
 
+
+
+
     @GetMapping("/users")
     public Collection<User> getAllUsers() {
         return inMemoryUserStorage.getAllUsers();

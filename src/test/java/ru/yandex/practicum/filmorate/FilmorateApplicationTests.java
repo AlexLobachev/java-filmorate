@@ -4,37 +4,50 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.controller.UserController;
-/*import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.OperationsFilmService;
+import ru.yandex.practicum.filmorate.service.OperationsUserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.Validator;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;*/
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 //@SpringBootTest
-/*class FilmorateApplicationTests {
+class FilmorateApplicationTests {
+    Validator validator = new Validator();
+    InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage(validator);
+    OperationsUserService operationsUserService = new OperationsUserService(inMemoryUserStorage, validator);
+
+    InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage(validator);
+    OperationsFilmService operationsFilmService = new OperationsFilmService(inMemoryFilmStorage, validator);
     UserController userController;
     FilmController filmController;
     User user;
     Film film;
 
+
     @BeforeEach
     public void beforeEach() {
-        userController = new UserController();
-        filmController = new FilmController();
+        userController = new UserController(inMemoryUserStorage, operationsUserService);
+        filmController = new FilmController(inMemoryFilmStorage, operationsFilmService);
     }
 
     @Test
     void flattererMustBeAdded() {
+
         user = new User(1,
                 "Kapa@yandex.ru",
                 "Кошка_капа",
                 "Капа",
                 LocalDate.of(2018, 5, 30));
+
         userController.addUser(user);
 
         assertEquals(user.getEmail(),
@@ -123,7 +136,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;*/
                 "Киборг убийца",
                 "Киборг всех убивает",
                 LocalDate.of(1985, 5, 30),
-                Duration.ofMinutes(120));
+                10);
         filmController.addFilm(film);
 
         assertEquals(film.getName(), "Киборг убийца");
@@ -135,7 +148,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;*/
                 "",
                 "Киборг всех убивает",
                 LocalDate.of(1985, 5, 30),
-                Duration.ofMinutes(120));
+                10);
         ValidationException thrown = assertThrows(ValidationException.class, () -> filmController.addFilm(film));
         assertEquals("Название не может быть пустым", thrown.getMessage());
     }
@@ -161,7 +174,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;*/
                         "Хорошо живет на свете \n" +
                         "Винии-Пух! \n" +
                         "Оттого поет он эти \n" +
-                        "Песни вслух! ", LocalDate.of(1985, 5, 30), Duration.ofMinutes(120));
+                        "Песни вслух! ", LocalDate.of(1985, 5, 30), 10);
         ValidationException thrown = assertThrows(ValidationException.class, () -> filmController.addFilm(film));
         assertEquals("Описание слишком длинное, макс. длина 200 символов", thrown.getMessage());
     }
@@ -172,7 +185,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;*/
                 "Киборг убийца",
                 "Киборг всех убивает",
                 LocalDate.of(1884, 5, 30),
-                Duration.ofMinutes(120));
+                10);
         ValidationException thrown = assertThrows(ValidationException.class, () -> filmController.addFilm(film));
         assertEquals("Дата релиза не может быть раньше 28 декабря 1895 года", thrown.getMessage());
     }
@@ -184,11 +197,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;*/
                 "Киборг убийца",
                 "Киборг всех убивает",
                 LocalDate.of(1984, 5, 30),
-                Duration.ofMinutes(-120));
-        ValidationException thrown = assertThrows(ValidationException.class, () -> filmController.addFilm(film));
+                -10);
+       ValidationException thrown = assertThrows(ValidationException.class, () -> filmController.addFilm(film));
         assertEquals("Продолжительность фильма не может быть отрицательной", thrown.getMessage());
     }
 
 }
 
-*/
+
