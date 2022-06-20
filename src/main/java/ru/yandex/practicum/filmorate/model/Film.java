@@ -1,21 +1,27 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.Duration;
 import java.time.LocalDate;
+import java.util.TreeSet;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Film {
-
-    private int id;
+    @NonNull
+    private Integer id;
+    @NonNull
     private String name;
+    @NonNull
     private String description;
+    @NonNull
     private LocalDate releaseDate;
-    private Duration duration;
-    //private String oldName;
+    @NonNull
+    private Integer duration;
+    @NonNull
+    private Integer rate = 0;
+    private TreeSet<Integer> userId = new TreeSet<>();
+
+
 }

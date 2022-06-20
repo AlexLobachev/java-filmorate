@@ -1,12 +1,15 @@
-package ru.yandex.practicum.filmorate.controller;
+package ru.yandex.practicum.filmorate.storage;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 
-class ControllersValidator {
+@Component
+public class Validator {
+
 
     protected void userValidator(User user) {
         if (user.getEmail().isBlank() || user.getEmail() == null) {
@@ -27,6 +30,7 @@ class ControllersValidator {
         if (user.getBirthday().isAfter(LocalDate.now()) || user.getBirthday().equals(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть сегодняшней или будущей");
         }
+
     }
 
     protected void filmValidator(Film film) {
@@ -42,11 +46,19 @@ class ControllersValidator {
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }
 
-        if (film.getDuration().getSeconds() < 0) {
+        if (film.getDuration()/*.getSeconds()*/ < 0) {
             throw new ValidationException("Продолжительность фильма не может быть отрицательной");
         }
 
     }
 
+    public void invalidId(int id) {
+        if (id < 0) {
+            throw new IllegalArgumentException("Неверный ID");
+        }
+    }
+
 
 }
+
+
