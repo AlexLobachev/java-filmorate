@@ -75,4 +75,4 @@ Template repository for Filmorate project.
 
 ----------------------------------------------
 
-![This is an image](/assets/images/electrocat.png)
+![This is an image](https://github.com/HONDACIVIC5DDDDD/java-filmorate/blob/add-database/Untitled.png)
