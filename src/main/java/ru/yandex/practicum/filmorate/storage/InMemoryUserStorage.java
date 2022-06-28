@@ -26,7 +26,7 @@ public class InMemoryUserStorage implements UserStorage {
         userDbStorage.addUser(user);
         log.debug("Пользователь добавлен");
         return user;
-    }//
+    }
 
     public User updateUser(User user) {
         validator.userValidator(user);

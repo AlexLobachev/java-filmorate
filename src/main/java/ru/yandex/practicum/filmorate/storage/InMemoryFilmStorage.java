@@ -27,7 +27,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         filmDbStorageImpl.addFilm(film);
         log.debug("Фильм добавлен");
         return film;
-    }//
+    }
 
     public Film updateFilm(Film film) {
         validator.filmValidator(film);

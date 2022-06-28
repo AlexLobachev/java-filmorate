@@ -21,7 +21,7 @@ public class OperationsUserService implements UserService {
         validator.invalidId(userId);
         log.debug("Пользователь получен!");
         return userDbStorage.getUser(userId);
-    }//
+    }
 
     public void addFriend(Integer userId, Integer friendId) {
         validator.invalidId(friendId);

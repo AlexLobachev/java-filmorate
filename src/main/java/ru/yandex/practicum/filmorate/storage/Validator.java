@@ -21,7 +21,7 @@ public class Validator {
             throw new ValidationException("Дата рождения не может быть сегодняшней или будущей");
         }
 
-    }//
+    }
 
     protected void filmValidator(Film film) {
 

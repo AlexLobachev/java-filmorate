@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Data//
+@Data
 @AllArgsConstructor
 public class Film {
 

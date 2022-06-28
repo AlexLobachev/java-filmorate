@@ -135,7 +135,7 @@ public class UserDbStorageImpl implements userDbStorage {
         return generalFriends;
     }
 
-//
+
     public void sendRequest(Integer userId, Integer requestId) {
         String sqlQuery = "insert into users_friend (user_id, status, request_id) " +
                 "values (?,?,?)";

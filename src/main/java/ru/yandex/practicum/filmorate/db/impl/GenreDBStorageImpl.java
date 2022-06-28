@@ -15,7 +15,7 @@ import java.util.Objects;
 public class GenreDBStorageImpl {
 
     private final JdbcTemplate jdbcTemplate;
-//
+
     public Genre getGenreId(Integer genreId) {
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select * from genre where genre_id = ?", genreId);
         sqlRowSet.next();

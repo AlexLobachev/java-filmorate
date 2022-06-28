@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 public class MpaController {
     private final OperationsFilmService operationsFilmService;
-//
+
     @GetMapping(value = "/mpa/{id}")
     public Mpa getMpaId(@PathVariable("id") Integer categoryId) {
         return operationsFilmService.getMpaId(categoryId);

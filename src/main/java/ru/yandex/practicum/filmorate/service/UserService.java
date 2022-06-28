@@ -9,7 +9,7 @@ public interface UserService {
 
     void addFriend(Integer userId, Integer friendId);
 
-    List<User> getFriends(Integer userId);//
+    List<User> getFriends(Integer userId);
 
     List<User> generalFriends(Integer userId, Integer otherId);
 

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@NoArgsConstructor//
+@NoArgsConstructor
 @AllArgsConstructor
 public class Mpa {
     @NonNull

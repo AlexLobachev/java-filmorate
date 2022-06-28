@@ -7,7 +7,7 @@ import lombok.NonNull;
 
 import java.util.Objects;
 
-@Data//
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Genre {

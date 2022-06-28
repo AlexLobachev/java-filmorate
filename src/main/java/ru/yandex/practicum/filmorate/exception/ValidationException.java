@@ -1,5 +1,5 @@
 package ru.yandex.practicum.filmorate.exception;
-//
+
 public class ValidationException extends RuntimeException {
     /**
      * Constructs a new exception with the specified detail message.  The

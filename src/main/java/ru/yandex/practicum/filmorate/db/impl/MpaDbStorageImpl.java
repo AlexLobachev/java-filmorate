@@ -15,7 +15,7 @@ import java.util.Objects;
 public class MpaDbStorageImpl {
 
     JdbcTemplate jdbcTemplate;
-//
+
     public Mpa getMpaId(Integer mpaId) {
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("" +
                 "select * " +

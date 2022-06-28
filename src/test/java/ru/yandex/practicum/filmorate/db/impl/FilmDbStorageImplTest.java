@@ -22,7 +22,7 @@ class FilmDbStorageImplTest {
     private final FilmStorage filmStorage;
     private final FilmService filmService;
 
-    @Test//
+    @Test
     void getAllFilm() {
         Film film = new Film(3,
                 "Test",

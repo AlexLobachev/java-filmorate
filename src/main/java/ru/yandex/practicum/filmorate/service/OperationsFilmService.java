@@ -39,7 +39,7 @@ public class OperationsFilmService implements FilmService {
         validator.invalidId(userId);
         filmDbStorageImpl.deleteLike(filmId, userId);
         log.debug("Лайк у фильма удален!");
-    }//
+    }
 
     public List<Film> getTenPopularMovies(Integer count) {
         return filmDbStorageImpl.getTenPopularMovies(count);
