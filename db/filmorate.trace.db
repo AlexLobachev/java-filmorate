@@ -22732,3 +22732,7 @@ DROP TABLE users [42102-200]
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "USERS" не найдена
 Table "USERS" not found; SQL statement:
 DROP TABLE users [42102-200]
+2022-06-28 23:11:11 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "FILMS" не найдена
+Table "FILMS" not found; SQL statement:
+DROP TABLE films [42102-200]

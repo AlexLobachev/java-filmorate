@@ -1,11 +1,11 @@
-DROP TABLE users;
-DROP TABLE users_friend;
-DROP TABLE users_rate;
-DROP TABLE films;
-DROP TABLE films_genre;
-DROP TABLE film_category;
-DROP TABLE genre;
-DROP TABLE category;
+--DROP TABLE users;
+--DROP TABLE users_friend;
+--DROP TABLE users_rate;
+--DROP TABLE films;
+--DROP TABLE films_genre;
+--DROP TABLE film_category;
+--DROP TABLE genre;
+--DROP TABLE category;
 
 
 
