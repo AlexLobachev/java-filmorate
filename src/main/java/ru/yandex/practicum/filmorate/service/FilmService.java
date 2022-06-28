@@ -1,15 +1,26 @@
 package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
 
 public interface FilmService {
-    Film addLike(int id, int userId);
+    Film getFilm(Integer filmId);//
 
-    Film getFilm(int id);
+    void addLike(Integer filmId, Integer userId);
 
-    Film deleteLike(int id, int userId);
+    void deleteLike(Integer filmId, Integer userId);
 
-    List<Film> getTenPopularMovies(int count);
+    List<Film> getTenPopularMovies(Integer count);
+
+    Genre getGenreId(Integer genreId);
+
+    List<Genre> getGenreAll();
+
+    Mpa getMpaId(Integer categoryId);
+
+    List<Mpa> getMpaAll();
+
 }

@@ -1,17 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.OperationsUserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Valid
@@ -27,16 +23,14 @@ public class UserController {
     }
 
 
-
-
     @GetMapping("/users")
-    public Collection<User> getAllUsers() {
+    public List<User> getAllUsers() {
         return inMemoryUserStorage.getAllUsers();
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable int id) {
-        return operationsUserService.getUser(id);
+    public User getUser(@PathVariable("id") Integer userId) {
+        return operationsUserService.getUser(userId);
     }
 
     @PostMapping(value = "/users")
@@ -49,40 +43,38 @@ public class UserController {
         return inMemoryUserStorage.updateUser(user);
     }
 
-    @PutMapping(value = "/users/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable int id, @PathVariable int friendId) {
-        return operationsUserService.addFriend(id, friendId);
+    //@PutMapping(value = "/users/{id}/friends/{friendId}")
+    @PutMapping(value = "/users/{id}/friendsAdd/{friendId}")
+    public void addFriend(@PathVariable("id") Integer userId, @PathVariable Integer friendId) {
+        operationsUserService.addFriend(userId, friendId);
     }
 
     @GetMapping(value = "/users/{id}/friends")
-    public List<User> getFriends(@PathVariable int id) {
-        return operationsUserService.getFriends(id);
+    public List<User> getFriends(@PathVariable("id") Integer userId) {
+        return operationsUserService.getFriends(userId);
     }
 
+//
     @DeleteMapping(value = "/users/{id}/friends/{friendId}")
-    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) {
-        return operationsUserService.deleteFriend(id, friendId);
+    public void deleteFriend(@PathVariable("id") Integer userId, @PathVariable Integer friendId) {
+        operationsUserService.deleteFriend(userId, friendId);
     }
 
     @GetMapping(value = "/users/{id}/friends/common/{otherId}")
-    public List<User> generalFriends(@PathVariable int id, @PathVariable int otherId) {
-        return operationsUserService.generalFriends(id, otherId);
+    public List<User> generalFriends(@PathVariable("id") Integer userId, @PathVariable Integer otherId) {
+        return operationsUserService.generalFriends(userId, otherId);
     }
 
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> errorException(final ValidationException e) {
-        return Map.of("ERROR", "ОШИБКА ВВОДА",
-                "errorMessage", e.getMessage());
+    //@PutMapping(value = "/users/{id}/sendRequest/{friendId}")
+    @PutMapping(value = "/users/{id}/friends/{friendId}")
+    public void sendRequest(@PathVariable("id") Integer userId, @PathVariable("friendId") Integer requestId) {
+        operationsUserService.sendRequest(userId, requestId);
+        addFriend(userId, requestId);   //заглушка для тестов
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> errorException(final IllegalArgumentException e) {
-        return Map.of("ERROR", "ОШИБКА ВВОДА",
-                "errorMessage", e.getMessage());
+    @PutMapping(value = "/users/{id}/rejectRequest/{requestId}")
+    public void rejectRequest(@PathVariable("id") Integer userId, @PathVariable("requestId") Integer requestId) {
+        operationsUserService.rejectRequest(userId, requestId);
     }
-
 
 }
