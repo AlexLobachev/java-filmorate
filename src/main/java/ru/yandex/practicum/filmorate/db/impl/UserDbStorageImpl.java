@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.db.userDbStorage;
+import ru.yandex.practicum.filmorate.db.UserDbStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class UserDbStorageImpl implements userDbStorage {
+public class UserDbStorageImpl implements UserDbStorage {
     private final JdbcTemplate jdbcTemplate;
 
     public UserDbStorageImpl(JdbcTemplate jdbcTemplate) {
@@ -29,12 +29,7 @@ public class UserDbStorageImpl implements userDbStorage {
                 "where user_id = ?", userId);
 
         if (sqlRowSet.next()) {
-            User user = new User(sqlRowSet.getInt("user_id"),
-                    Objects.requireNonNull(sqlRowSet.getString("email")),
-                    Objects.requireNonNull(sqlRowSet.getString("login")),
-                    Objects.requireNonNull(sqlRowSet.getString("name_user")),
-                    Objects.requireNonNull(sqlRowSet.getDate("birthday")).toLocalDate());
-            return user;
+            return createUser(sqlRowSet);
         } else {
             return null;
         }
@@ -47,12 +42,7 @@ public class UserDbStorageImpl implements userDbStorage {
                 " from users ");
         List<User> users = new ArrayList<>();
         while (sqlRowSet.next()) {
-            User user = new User(sqlRowSet.getInt("user_id"),
-                    Objects.requireNonNull(sqlRowSet.getString("email")),
-                    Objects.requireNonNull(sqlRowSet.getString("login")),
-                    Objects.requireNonNull(sqlRowSet.getString("name_user")),
-                    Objects.requireNonNull(sqlRowSet.getDate("birthday")).toLocalDate());
-            users.add(user);
+            users.add(createUser(sqlRowSet));
         }
         return users;
     }
@@ -74,12 +64,6 @@ public class UserDbStorageImpl implements userDbStorage {
         jdbcTemplate.update(sqlQuery, user.getName(), user.getEmail(), user.getLogin(), user.getBirthday(), user.getId());
 
     }
-    /*@Override
-    public void addFriend(Integer userId, Integer friendId) {
-        String sqlQuery = "insert into users_friend (user_id, friend_id) " +
-                "values (?, ?)";
-        jdbcTemplate.update(sqlQuery, userId, friendId);
-    }*/
 
     @Override
     public void addFriend(Integer userId, Integer friendId) {
@@ -148,6 +132,14 @@ public class UserDbStorageImpl implements userDbStorage {
                 " where user_id = ?" +
                 " AND request_id = ?";
         jdbcTemplate.update(sqlQuery, userId, requestId);
+    }
+
+    public User createUser(SqlRowSet sqlRowSet){
+        return new User(sqlRowSet.getInt("user_id"),
+                Objects.requireNonNull(sqlRowSet.getString("email")),
+                Objects.requireNonNull(sqlRowSet.getString("login")),
+                Objects.requireNonNull(sqlRowSet.getString("name_user")),
+                Objects.requireNonNull(sqlRowSet.getDate("birthday")).toLocalDate());
     }
 
     public Integer readIdDb() {

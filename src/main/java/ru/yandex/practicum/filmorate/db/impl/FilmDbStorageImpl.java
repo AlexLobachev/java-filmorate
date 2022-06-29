@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.db.filmDbStorage;
+import ru.yandex.practicum.filmorate.db.FilmDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -15,7 +15,7 @@ import java.util.*;
 @Component
 @Slf4j
 @AllArgsConstructor
-public class FilmDbStorageImpl implements filmDbStorage {
+public class FilmDbStorageImpl implements FilmDbStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final GenreDBStorageImpl genreDBStorage;
@@ -31,14 +31,7 @@ public class FilmDbStorageImpl implements filmDbStorage {
                 " where film_id = ?" +
                 "", id);
         if (sqlRowSet.next()) {
-            return new Film(sqlRowSet.getInt("film_id"),
-                    sqlRowSet.getString("name_film"),
-                    sqlRowSet.getString("description"),
-                    Objects.requireNonNull(sqlRowSet.getDate("releasedate")).toLocalDate(),
-                    sqlRowSet.getInt("duration"),
-                    sqlRowSet.getInt("rate"),
-                    getFilmsMpa(sqlRowSet.getInt("film_id")),
-                    getFilmsGenre(sqlRowSet.getInt("film_id")));
+            return createFilm(sqlRowSet);
         } else {
             return null;
         }
@@ -51,15 +44,7 @@ public class FilmDbStorageImpl implements filmDbStorage {
                 "from films ");
         List<Film> films = new ArrayList<>();
         while (sqlRowSet.next()) {
-            Film film = new Film(sqlRowSet.getInt("film_id"),
-                    sqlRowSet.getString("name_film"),
-                    sqlRowSet.getString("description"),
-                    Objects.requireNonNull(sqlRowSet.getDate("releasedate")).toLocalDate(),
-                    sqlRowSet.getInt("duration"),
-                    sqlRowSet.getInt("rate"),
-                    getFilmsMpa(sqlRowSet.getInt("film_id")),
-                    getFilmsGenre(sqlRowSet.getInt("film_id")));
-            films.add(film);
+            films.add(createFilm(sqlRowSet));
         }
         return films;
     }
@@ -192,6 +177,16 @@ public class FilmDbStorageImpl implements filmDbStorage {
         return mpaDbStorage.getMpaId(sqlRowSet.getInt("category_id"));
     }
 
+    private Film createFilm(SqlRowSet sqlRowSet) {
+        return new Film(sqlRowSet.getInt("film_id"),
+                sqlRowSet.getString("name_film"),
+                sqlRowSet.getString("description"),
+                Objects.requireNonNull(sqlRowSet.getDate("releasedate")).toLocalDate(),
+                sqlRowSet.getInt("duration"),
+                sqlRowSet.getInt("rate"),
+                getFilmsMpa(sqlRowSet.getInt("film_id")),
+                getFilmsGenre(sqlRowSet.getInt("film_id")));
+    }
 
     public Integer readIdDb() {
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("" +

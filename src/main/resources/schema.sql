@@ -84,15 +84,4 @@ INSERT INTO category (category) VALUES ('NC-17');
 
 
 
---DROP TABLE users
---DROP TABLE users_friend
---DROP TABLE users_rate
---DROP TABLE films
---DROP TABLE films_genre
---DROP TABLE film_category
-
---DROP TABLE genre
---DROP TABLE category
-
---INSERT INTO users(name_user,email,login,birthday)VALUES ('Дмитрий','yandex@prakt.ru','lelya','1990-05-23');
 
