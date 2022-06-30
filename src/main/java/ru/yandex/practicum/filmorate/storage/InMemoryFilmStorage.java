@@ -1,50 +1,44 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.db.impl.FilmDbStorageImpl;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InMemoryFilmStorage implements FilmStorage {
-    private final Map<Integer, Film> films = new HashMap<>();
-    private int id;
     private final Validator validator;
+    private final FilmDbStorageImpl filmDbStorageImpl;
 
-    @Autowired
-    public InMemoryFilmStorage(Validator validator) {
-        this.validator = validator;
-    }
 
-    public Collection<Film> getAllFilms() {
-        log.debug("Всего фильмов = {}", films.size());
-        return films.values();
+    public List<Film> getAllFilms() {
+        return filmDbStorageImpl.getAllFilm();
     }
 
     public Film addFilm(Film film) {
         validator.filmValidator(film);
-        film.setId(++id);
-        films.put(id, film);
-        log.debug("Фильм добавлен, всего фильмов = {}", films.size());
-
+        film.setId(readIdDb() + 1);
+        filmDbStorageImpl.addFilm(film);
+        log.debug("Фильм добавлен");
         return film;
     }
 
     public Film updateFilm(Film film) {
         validator.filmValidator(film);
         validator.invalidId(film.getId());
-        films.put(film.getId(), film);
-        log.debug("Фильм успешно изменен, всего фильмов = {}", films.size());
+        filmDbStorageImpl.updateFilm(film);
+        log.debug("Фильм успешно изменен");
 
         return film;
     }
 
-    public Map<Integer, Film> getFilms() {
-        return films;
+    public Integer readIdDb() {
+        return filmDbStorageImpl.readIdDb();
     }
 }

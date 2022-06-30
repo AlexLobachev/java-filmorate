@@ -12,18 +12,8 @@ public class Validator {
 
 
     protected void userValidator(User user) {
-        if (user.getEmail().isBlank() || user.getEmail() == null) {
-            throw new ValidationException("Адрес не может быть пустым");
-        }
-        if (!user.getEmail().contains("@")) {
-            throw new ValidationException("Некорректный Email");
-        }
 
-        if (user.getLogin().isBlank() || user.getLogin() == null || user.getLogin().contains(" ")) {
-            throw new ValidationException("Логин не может быть пустым или содержать пробелы");
-        }
-
-        if (user.getName().isBlank() || user.getName() == null) {
+        if (user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
 
@@ -34,9 +24,6 @@ public class Validator {
     }
 
     protected void filmValidator(Film film) {
-        if (film.getName().isBlank() || film.getName() == null) {
-            throw new ValidationException("Название не может быть пустым");
-        }
 
         if (film.getDescription().isBlank() || film.getDescription() == null || film.getDescription().length() > 200) {
             throw new ValidationException("Описание слишком длинное, макс. длина 200 символов");
@@ -52,7 +39,8 @@ public class Validator {
 
     }
 
-    public void invalidId(int id) {
+    public void invalidId(Integer id) {
+
         if (id < 0) {
             throw new IllegalArgumentException("Неверный ID");
         }

@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate.model;
 
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
-import java.util.TreeSet;
 
 @Data
 @NoArgsConstructor
@@ -17,10 +20,13 @@ public class User {
     @NonNull
     private String email;
     @NonNull
+    @Pattern(regexp = "\\S*$")
     private String login;
     @NonNull
     private String name;
     @NonNull
     private LocalDate birthday;
-    private TreeSet<Integer> idFriends = new TreeSet<>();
+    private String status;
+
+
 }

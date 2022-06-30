@@ -1,50 +1,43 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.db.impl.UserDbStorageImpl;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InMemoryUserStorage implements UserStorage {
-    private final Map<Integer, User> users = new HashMap<>();
-    private int id = 0;
     private final Validator validator;
+    private final UserDbStorageImpl userDbStorage;
 
-    @Autowired
-    public InMemoryUserStorage(Validator validator) {
-        this.validator = validator;
-    }
-
-
-    public Collection<User> getAllUsers() {
-        log.debug("Всего пользователей = {}", users.size());
-        return users.values();
+    public List<User> getAllUsers() {
+        return userDbStorage.getAllUser();
     }
 
     public User addUser(User user) {
         validator.userValidator(user);
-        user.setId(++id);
-        users.put(id, user);
-        log.debug("Пользователь добавлен, всего пользователей = {}", users.size());
+        user.setId(readIdDb() + 1);
+        userDbStorage.addUser(user);
+        log.debug("Пользователь добавлен");
         return user;
     }
 
     public User updateUser(User user) {
         validator.userValidator(user);
         validator.invalidId(user.getId());
-        users.put(user.getId(), user);
-        log.debug("Пользователь успешно изменен, всего пользователей = {}", users.size());
+        userDbStorage.updateUser(user);
+        log.debug("Пользователь успешно изменен");
         return user;
     }
 
-    public Map<Integer, User> getUsers() {
-        return users;
-    }
 
+    public Integer readIdDb() {
+        return userDbStorage.readIdDb();
+    }
 }
